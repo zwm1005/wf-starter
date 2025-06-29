@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--OFF > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+<Configuration status="INFO" strict="true" packages="org.apache.logging.log4j.core">
+    <Properties>
+        <property name="APP_NAME" value="app"/>
+        <property name="CONSOLE_LOG_PATTERN"
+                  value="%d{yyyy-MM-dd HH:mm:ss} %-5level [%X{traceId},%X{spanId}]  %logger{36} - %m%n"/>
+        <property name="FILE_LOG_PATTERN"
+                  value="%d{yyyy-MM-dd HH:mm:ss} %-5level [%X{traceId},%X{spanId}]  %logger{36} - %m%n"/>
+    </Properties>
+
+    <SpringProfile name="dev|local|test|test2">
+        <Appenders>
+            <Console name="Console" target="SYSTEM_OUT">
+                <PatternLayout pattern="${CONSOLE_LOG_PATTERN}"/>
+            </Console>
+            <RollingFile name="RollingFile" fileName="/opt/nas/log/${APP_NAME}.log"
+                         filePattern="/opt/nas/log/$${date:yyyy-MM}/${APP_NAME}-%d{MM-dd-yyyy}-%i.log.gz"
+                         immediateFlush="true" append="true">
+                <PatternLayout charset="UTF-8" pattern="${FILE_LOG_PATTERN}"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+                <DefaultRolloverStrategy max="20"/>
+            </RollingFile>
+        </Appenders>
+        <Loggers>
+            <Root level="DEBUG">
+                <AppenderRef ref="Console"/>
+                <AppenderRef ref="RollingFile"/>
+            </Root>
+            <Logger name="org.redisson" level="INFO"/>
+            <Logger name="org.apache" level="INFO"/>
+            <Logger name="org.springframework" level="INFO"/>
+            <Logger name="com.alibaba" level="ERROR"/>
+            <Logger name="springfox" level="ERROR"/>
+            <Logger name="Validator" level="ERROR"/>
+        </Loggers>
+    </SpringProfile>
+
+    <SpringProfile name="prod|pressure|release">
+        <Appenders>
+            <Console name="Console" target="SYSTEM_OUT">
+                <PatternLayout pattern="${CONSOLE_LOG_PATTERN}"/>
+            </Console>
+            <RollingFile name="RollingFile" fileName="/opt/nas/log/${APP_NAME}.log"
+                         filePattern="/opt/nas/log/$${date:yyyy-MM}/${APP_NAME}-%d{MM-dd-yyyy}-%i.log.gz"
+                         immediateFlush="false" append="false">
+                <PatternLayout charset="UTF-8" pattern="${FILE_LOG_PATTERN}"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+                <DefaultRolloverStrategy max="20"/>
+            </RollingFile>
+            <Async name="AsyncFileInfo" bufferSize="1024" includeLocation="false">
+                <AppenderRef ref="RollingFile"/>
+            </Async>
+        </Appenders>
+
+        <Loggers>
+            <Root level="WARN">
+                <AppenderRef ref="Console"/>
+                <AppenderRef ref="AsyncFileInfo"/>
+            </Root>
+            <Logger name="org.redisson" level="INFO"/>
+            <Logger name="org.apache" level="INFO"/>
+            <Logger name="org.springframework" level="INFO"/>
+            <Logger name="com.alibaba" level="ERROR"/>
+            <Logger name="springfox" level="ERROR"/>
+            <Logger name="Validator" level="ERROR"/>
+        </Loggers>
+    </SpringProfile>
+</Configuration>

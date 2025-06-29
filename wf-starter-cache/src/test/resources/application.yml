@@ -1,0 +1,21 @@
+spring:
+  redis:
+    host: 192.168.3.192
+    database: 1
+    port: 6379
+    password: 123456
+  cache:
+    type: caffeine
+
+#wf:
+#  sentinel:
+#    blockedMessage: "trade center busy"
+#  cache:
+#    redis:
+#      config:
+#        t-1:
+#          ttl: 5000
+#          maxIdleTime: 5000
+#        t-2:
+#          ttl: 3000
+#          maxIdleTime: 3000

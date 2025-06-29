@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  fun.werfamily.starter.feign.FeignConfiguration,\
+  fun.werfamily.starter.feign.CircuitBreakerConfiguration
+org.springframework.cloud.bootstrap.BootstrapConfiguration=\
+  fun.werfamily.starter.feign.FeignPropertySourceConfig

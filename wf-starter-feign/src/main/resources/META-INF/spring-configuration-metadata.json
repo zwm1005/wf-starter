@@ -1,0 +1,25 @@
+{
+  "groups": [
+    {
+      "name": "feign.circuitbreaker",
+      "type": "fun.werfamily.starter.feign.CircuitBreakerProperties",
+      "sourceType": "fun.werfamily.starter.feign.CircuitBreakerProperties"
+    },
+    {
+      "name": "feign.circuitbreaker.time-limiter",
+      "type": "fun.werfamily.starter.feign.CircuitBreakerProperties$TimeLimiter",
+      "sourceType": "fun.werfamily.starter.feign.CircuitBreakerProperties",
+      "sourceMethod": "getTimeLimiter()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "feign.circuitbreaker.time-limiter.time-out-mills",
+      "type": "java.lang.Long",
+      "description": "请求超时设置",
+      "sourceType": "fun.werfamily.starter.feign.CircuitBreakerProperties$TimeLimiter",
+      "defaultValue": 5000
+    }
+  ],
+  "hints": []
+}

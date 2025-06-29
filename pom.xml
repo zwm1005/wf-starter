@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>wf-starter-bom</artifactId>
+        <groupId>fun.werfamily.project</groupId>
+        <version>3.0.1</version>
+    </parent>
+
+    <artifactId>wf-starter-groups</artifactId>
+    <version>3.0.1</version>
+
+    <modules>
+        <module>wf-starter-nacos</module>
+        <module>wf-core-boot</module>
+        <module>wf-starter-logger</module>
+        <module>wf-starter-feign</module>
+        <module>wf-starter-database</module>
+        <module>wf-starter-cache</module>
+        <module>wf-starter-timer</module>
+        <module>wf-starter-mq</module>
+        <module>wf-starter-sequence</module>
+        <module>wf-core-base</module>
+        <module>wf-starter-sentinel</module>
+        <module>wf-starter-lock</module>
+        <module>wf-starter-process</module>
+        <module>wf-starter-transaction</module>
+        <module>wf-core-util</module>
+        <module>wf-starter-sentry</module>
+        <module>wf-core-encrypt</module>
+        <module>wf-core-excel</module>
+        <module>wf-core-obs</module>
+        <module>wf-core-logaudit</module>
+        <module>wf-starter-tenant</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+</project>

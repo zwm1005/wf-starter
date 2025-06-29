@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+fun.werfamily.starter.mq.rocket.config.MQBaseAutoConfiguration,\
+fun.werfamily.starter.mq.rocket.config.MQConsumerAutoConfiguration,\
+fun.werfamily.starter.mq.rocket.config.MQProducerAutoConfiguration

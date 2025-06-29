@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="fun.werfamily.transaction.framework.mapper.TransactionTaskLogMapper">
+    <resultMap id="BaseResultMap" type="fun.werfamily.transaction.framework.dao.TransactionTaskLogDO">
+        <id property="id" column="id"/>
+        <result property="taskId" column="task_id"/>
+        <result property="taskType" column="task_type"/>
+        <result property="taskClassName" column="task_class_name"/>
+        <result property="status" column="status"/>
+        <result property="errorCode" column="error_code"/>
+        <result property="errorMessage" column="error_message"/>
+        <result property="retryStatus" column="retry_status"/>
+        <result property="times" column="times"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="nextExecuteTime" column="next_execute_time"/>
+        <result property="requestAdditionalInfo"
+                column="request_additional_info"/>
+        <result property="resultAdditionalInfo"
+                column="result_additional_info"/>
+        <result property="transactionType" column="transaction_type"/>
+        <result property="reversalStatus" column="reversal_status"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,task_id,
+        task_type,task_class_name,status,error_code,error_message,retry_status,
+        times,update_time,create_time,next_execute_time,request_additional_info,result_additional_info,transaction_type,reversal_status
+    </sql>
+
+
+    <select id="selectByTaskId" resultMap="BaseResultMap"
+            useCache="false">
+        select
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+		from transaction_task_log
+		where task_id=#{taskId} and task_type = #{taskType}
+		]]>
+    </select>
+
+    <update id="updateByTaskId" parameterType="fun.werfamily.transaction.framework.dao.TransactionTaskLogDO">
+        update transaction_task_log
+        SET
+        status = #{status},
+        times=0,
+        retry_status='WAIT_RETRY',
+        error_message='手动重试'
+        where task_type=#{taskType} and task_id=#{taskId}
+    </update>
+
+    <update id="batchUpdateStatus">
+        update transaction_task_log
+        SET
+        status = #{targetStatus}
+        where status=#{sourceStatus} and id in(
+        <foreach collection="idList" item="item" open="" separator=",">
+            #{item}
+        </foreach>
+        )
+    </update>
+
+
+    <update id="updateReversiStatus" parameterType="fun.werfamily.transaction.framework.dao.TransactionTaskLogDO">
+
+        update transaction_task_log
+        SET
+        reversal_status = #{reversalStatus},
+        <if test="errorCode != null ">
+            error_code =#{errorCode},
+        </if>
+        <if test="errorMessage != null">
+            error_message = #{errorMessage},
+        </if>
+        <if test="retryStatus != null">
+            retry_status =#{retryStatus},
+        </if>
+        <if test="times">
+            times = #{times},
+        </if>
+        <if test="nextExecuteTime != null">
+            next_execute_time = #{nextExecuteTime},
+        </if>
+        <if test="resultAdditionalInfo != null">
+            result_additional_info = #{resultAdditionalInfo},
+        </if>
+        update_time = now()
+        WHERE id = #{id}
+    </update>
+
+    <insert id="save"
+            parameterType="fun.werfamily.transaction.framework.dao.TransactionTaskLogDO"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into transaction_task_log
+        (task_id,
+        task_type,
+        task_class_name,
+        status,
+        <if test="errorCode != null">
+            error_code,
+        </if>
+        <if test="errorMessage != null">
+            error_message,
+        </if>
+        <if test="retryStatus != null">
+            retry_status,
+        </if>
+        times,
+        <if test="nextExecuteTime != null">
+            next_execute_time,
+        </if>
+        <if test="requestAdditionalInfo != null">
+            request_additional_info,
+        </if>
+
+        <if test="resultAdditionalInfo != null">
+            result_additional_info
+        </if>
+        update_time,
+        create_time,
+        transaction_type,
+        reversal_status
+        )
+        values
+        (#{taskId},
+        #{taskType},
+        #{taskClassName},
+        #{status},
+        <if test="errorCode != null">
+            #{errorCode},
+        </if>
+        <if test="errorMessage != null">
+            #{errorMessage},
+        </if>
+        <if test="retryStatus != null">
+            #{retryStatus},
+        </if>
+        #{times},
+
+        <if test="nextExecuteTime != null">
+            #{nextExecuteTime},
+        </if>
+        <if test="requestAdditionalInfo != null">
+            #{requestAdditionalInfo},
+        </if>
+        <if test="resultAdditionalInfo != null">
+            #{resultAdditionalInfo}
+        </if>
+        now(),
+        now(),
+        #{transactionType},
+        #{reversalStatus}
+        )
+    </insert>
+
+    <insert id="saveCustomTime"
+            parameterType="fun.werfamily.transaction.framework.dao.TransactionTaskLogDO"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into transaction_task_log
+        (task_id,
+        task_type,
+        task_class_name,
+        status,
+        <if test="errorCode != null">
+            error_code,
+        </if>
+        <if test="errorMessage != null">
+            error_message,
+        </if>
+        <if test="retryStatus != null">
+            retry_status,
+        </if>
+        times,
+        <if test="nextExecuteTime != null">
+            next_execute_time,
+        </if>
+        <if test="requestAdditionalInfo != null">
+            request_additional_info,
+        </if>
+
+        <if test="resultAdditionalInfo != null">
+            result_additional_info
+        </if>
+        update_time,
+        create_time,
+        transaction_type,
+        reversal_status
+        )
+        values
+        (#{taskId},
+        #{taskType},
+        #{taskClassName},
+        #{status},
+        <if test="errorCode != null">
+            #{errorCode},
+        </if>
+        <if test="errorMessage != null">
+            #{errorMessage},
+        </if>
+        <if test="retryStatus != null">
+            #{retryStatus},
+        </if>
+        #{times},
+
+        <if test="nextExecuteTime != null">
+            #{nextExecuteTime},
+        </if>
+        <if test="requestAdditionalInfo != null">
+            #{requestAdditionalInfo},
+        </if>
+        <if test="updateTime != null">
+            #{updateTime},
+        </if>
+        <if test="createTime != null">
+            #{createTime},
+        </if>
+        #{transactionType},
+        #{reversalStatus}
+        )
+    </insert>
+
+
+    <update id="update" parameterType="fun.werfamily.transaction.framework.dao.TransactionTaskLogDO">
+
+        update transaction_task_log
+
+        SET
+        status = #{status},
+        <if test="errorCode != null ">
+            error_code =#{errorCode},
+        </if>
+        <if test="errorMessage != null">
+            error_message = #{errorMessage},
+        </if>
+        <if test="retryStatus != null">
+            retry_status =#{retryStatus},
+        </if>
+        <if test="times">
+            times = #{times},
+        </if>
+        <if test="nextExecuteTime != null">
+            next_execute_time = #{nextExecuteTime},
+        </if>
+        <if test="resultAdditionalInfo != null">
+            result_additional_info = #{resultAdditionalInfo},
+        </if>
+        update_time = now()
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        <![CDATA[
+        delete from transaction_task_log where update_time <= #{expireTime} and update_time  >= date_sub(#{expireTime}, interval 1 day)
+		]]>
+        <if test="taskStatus != null">
+            and status in (
+            <foreach collection="taskStatus" item="item" open="" separator=",">
+                #{item}
+            </foreach>
+            )
+        </if>
+        limit 1000
+    </delete>
+
+
+    <!--  获取努力确保型待重试的任务列表， -->
+    <select id="selectRetryTaskForInsure" resultMap="BaseResultMap" useCache="false">
+        select
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+        from transaction_task_log
+        where retry_status = 'WAIT_RETRY' and
+        next_execute_time  <=  now() and next_execute_time  >= date_sub(now(), interval #{hour} hour)
+        and transaction_type='INSURE'
+        order by next_execute_time limit
+        #{limitCount}
+        ]]>
+    </select>
+
+    <select id="selectLongtimeProcessingTaskForInsure" resultMap="BaseResultMap" useCache="false">
+        select
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+		from transaction_task_log
+		where update_time >= date_sub(now(), interval #{hour} hour) and update_time
+		<= date_sub(now(), interval 5 minute)
+		and status ='PROCESSING' and transaction_type='INSURE'
+		order by update_time limit #{limitCount}
+		]]>
+    </select>
+
+
+    <!--  异常冲正型中间状态恢复 -->
+    <select id="selectLongtimeProcessingTaskForReversal"
+            parameterType="java.lang.Integer" resultMap="BaseResultMap"
+            useCache="false">
+        select
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+			from
+			    transaction_task_log
+			where
+			    update_time >= date_sub(NOW(), INTERVAL #{hour} HOUR)
+			        and update_time <= date_sub(NOW(), INTERVAL 5 MINUTE)
+			        and transaction_type = 'REVERSAL'
+			        and status in ('PROCESSING' , 'SUCCESS', 'EXCEPTION')
+			        and reversal_status  not in ('REVERSAL_SUCCESS','REVERSAL_FAILED','REVERSAL_EXCEPTION')
+			        and retry_status !='WAIT_RETRY'
+			order by update_time
+			limit  #{limitCount}
+			]]>
+    </select>
+
+    <!--  冲正型冲正异常重试 -->
+    <select id="selectRetryTaskTaskForReversal"
+            parameterType="java.lang.Integer" resultMap="BaseResultMap"
+            useCache="false">
+        select
+        <include refid="Base_Column_List"/>
+        <![CDATA[
+        from transaction_task_log
+        where retry_status = 'WAIT_RETRY' and transaction_type='REVERSAL' and
+        next_execute_time  <= now() and next_execute_time  >= date_sub(now(), interval #{hour} hour)
+        order by next_execute_time limit  #{limitCount}
+        ]]>
+    </select>
+
+    <delete id="deleteById">
+        delete from transaction_task_log where id = #{id}
+    </delete>
+
+    <delete id="batchDelete">
+        delete from transaction_task_log where id in(
+        <foreach collection="idList" item="item" open="" separator=",">
+            #{item}
+        </foreach>
+        )
+    </delete>
+</mapper>

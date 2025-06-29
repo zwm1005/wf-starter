@@ -1,0 +1,2 @@
+org.springframework.cloud.bootstrap.BootstrapConfiguration=\
+fun.werfamily.starter.nacos.config.NacosConfiguration
