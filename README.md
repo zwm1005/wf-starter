@@ -76,6 +76,26 @@
 
 ---
 
+可以按需引入多个 Starter 实现能力组合。
+
+---
+
+## 🌟 推荐配合 [wf-template](https://github.com/zwm1005/wf-template) 脚手架项目使用
+
+- wf-starter 可与 [wf-template](https://github.com/zwm1005/wf-template) 微服务模板项目无缝配合使用。
+- 推荐先通过 wf-template 快速生成标准化微服务项目，然后在新项目的 `pom.xml` 中按需引入 wf-starter 中的各类能力组件，获得数据库、缓存、分布式锁、消息队列等能力的快速集成。
+- 这样可以极大提升微服务项目的开发效率和标准化程度，避免重复造轮子。
+
+---
+
+## 📝 例：wf-template + wf-starter 整体开发流程
+
+1. 使用 wf-template 或配套脚本生成新项目骨架
+2. 在新业务项目的 pom.xml 中引入所需的 wf-starter 组件
+3. 业务代码可直接基于这些能力组件实现，无需关注底层技术细节
+
+---
+
 ## 快速入门
 
 1. **引入依赖（以logger为例）：**
